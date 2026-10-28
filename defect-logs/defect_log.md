@@ -1,0 +1,34 @@
+# Defect Log: PSVS-REQ-v1.0
+
+| Defect ID | Req ID | Category | Description | Evidence | Severity | Suggested fix | Status |
+|---|---|---|---|---|---|---|---|
+| D01 | S1 | Incompleteness | "Registered" is never defined: who registers depositors, what happens on revocation or expiry, how a depositor is identified. | "only from registered depositors" | High | Add a registry requirement with lifecycle (register, suspend, revoke) and check at deposit time. | Open |
+| D02 | S2 | Vagueness | "Large number" is not quantifiable and not testable. | "can hold a large number of boxes" | Medium | Delete or replace with a concrete figure (see S3). | Open |
+| D03 | S2, S3 | Redundancy | S2 is subsumed by S3, which gives concrete capacities; keeping both risks divergence. | S2 vs "at most 50,000 boxes" | Low | Merge into S3. | Open |
+| D04 | S3 | Incompleteness | Scenario says "several chambers" but only four are specified; no total capacity; no action when a chamber is full. | "Chambers 1-3 ... Chamber 4" | Medium | Define chamber set, total capacity, and rejection/rerouting when full. | Open |
+| D05 | S3 | Ambiguity | Unclear what counts toward the limit: only physically present boxes, or also withdrawn/reserved/in-transit boxes. | "hold at most 50,000 boxes" | Medium | Define occupancy as boxes currently physically stored. | Open |
+| D06 | S3 | Untraceability | Capacity figures have no rationale or source (e.g., why Chamber 4 is smaller). | "Chamber 4 holds at most 20,000" | Low | Add a rationale/source field. | Open |
+| D07 | S4 | Ambiguity | "That depositor" is an institution; unclear which individuals act for it and how authorization is checked. | "only that depositor may withdraw it" | Medium | Define authorized representatives per depositor. | Open |
+| D08 | S4 | Incompleteness | No handling for depositor dissolution, merger, ownership transfer or deregistration while boxes are stored. | "belongs to exactly one depositor" | Medium | Add ownership-transfer and orphan-box rules. | Open |
+| D09 | S4, S5 | Contradiction | S4 allows only the owner to withdraw; S5 lets the authority release any box to any party. | S4 "only that depositor" vs S5 "any box to any requesting party" | High | Reword S4 as "except under S5"; define emergency release as a separate operation. | Open |
+| D10 | S5 | Vagueness | "Emergency" is undefined: who declares it, criteria, duration. | "In an emergency" | High | Define emergency, declaring authority and procedure. | Open |
+| D11 | S5 | Ambiguity | "Any requesting party" is unbounded; "release" vs "withdraw" unclear; "vault authority" undefined. | "release any box to any requesting party" | High | Define "release", the authority role and recipient vetting. | Open |
+| D12 | S5, S10 | Incompleteness | Not stated whether emergency releases count toward the 20% yearly quota or must be audited/notified to the owner. | S5 vs "at most 20% ... per year" | Medium | State that S10 does not apply to S5 releases; require owner notification. | Open |
+| D13 | S6 | Vagueness | "Safe temperature" has no numeric range or tolerance. | "stored at a safe temperature" | High | Replace with "between X°C and -18°C". | Open |
+| D14 | S6, S7 | Redundancy | S6 (generic) overlaps with S7 (specific limit). | S6 vs S7 | Low | Merge into S7 and trace as a parent-child pair. | Open |
+| D15 | S7, S8 | Contradiction | "Never above -18°C" conflicts with warming a chamber to 0°C. | S7 "never rise above -18°C" vs S8 "warmed to 0°C" | High | S7 should say "except in maintenance mode (S8)"; require boxes to be removed first. | Open |
+| D16 | S7 | Infeasibility | An absolute "never" cannot be guaranteed (power or equipment failure). | "shall never rise above" | Medium | Restate as a bounded guarantee (alarm within N minutes, max excursion time). | Open |
+| D17 | S7 | Non-verifiability | No measurement point, sensor accuracy, sampling interval or alarm; "never" cannot be tested in finite time. | "Chamber temperature" | Medium | Define sensors, sampling interval and alarm threshold. | Open |
+| D18 | S8 | Incompleteness | No limit on maintenance duration, who authorizes it, whether boxes stay inside, or how normal operation resumes. | "During maintenance" | High | Add maintenance-mode preconditions (empty chamber or relocation), authorization and time limit. | Open |
+| D19 | S8 | Ambiguity | "May be warmed to 0°C": is 0°C a maximum or a target? "May" is optional vs mandatory. | "may be warmed to 0°C" | Low | Say "shall not exceed 0°C during maintenance". | Open |
+| D20 | S9 | Vagueness | "Low viability" has no threshold or measure (e.g., germination %). | "low viability" | High | Define viability metric and threshold per species. | Open |
+| D21 | S9 | Non-verifiability | "Promptly" gives no time bound, so it cannot be tested. | "flagged promptly" | Medium | E.g., "within 24 hours of the test result". | Open |
+| D22 | S9 | Incompleteness | Does not say who tests viability, how often, or how for sealed boxes; flag recipient and process unclear. | "flagged ... for regeneration" | Medium | Define testing schedule, responsible role and notification to depositor. | Open |
+| D23 | S10 | Ambiguity | The 20% base is unclear (boxes held now / at start of year / ever deposited); "year" is calendar or rolling. | "20% of its boxes of a species per year" | High | Define base = boxes held on 1 Jan, calendar year. | Open |
+| D24 | S10 | Incompleteness | Rounding not specified; for small holdings (<5 boxes) 20% is below one box. | "at most 20%" | Medium | Specify floor/ceil and a minimum of 1 box. | Open |
+| D25 | S10, S11 | Incompleteness | Unclear whether redeposited boxes restore the quota or whether boxes failing re-inspection still count as withdrawn. | S10 "withdraw" vs S11 "redeposited" | Medium | Define quota accounting for redeposit. | Open |
+| D26 | S11 | Vagueness | "Re-inspection" is undefined (who, what criteria, how). | "only after re-inspection" | Medium | Define inspection checklist and inspector role. | Open |
+| D27 | S11 | Incompleteness | No outcome for a failed re-inspection; no check that the depositor is still registered (S1); no chamber assignment on redeposit. | "may be redeposited" | Medium | Add rejection path and link to S1/S3. | Open |
+| D28 | S12 | Non-verifiability | "Good" is subjective, so it cannot be tested. | "keep a good audit trail" | High | Replace with measurable properties (complete, immutable, timestamped). | Open |
+| D29 | S12 | Incompleteness | Does not list recorded fields (actor, time, box, action), retention period, tamper protection, or whether it covers emergency actions and temperature events. | "all actions" | Medium | Define the audit record schema and retention. | Open |
+| D30 | S1-S12 | Untraceability | Requirements have no source, stakeholder, rationale or priority to trace to. | Whole requirements list | Low | Add source/rationale/priority columns. | Open |
